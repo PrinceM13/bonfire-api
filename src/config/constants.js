@@ -1,0 +1,10 @@
+exports.TYPE_CAFE = "CAFE";
+exports.TYPE_SPORTS = "SPORTS";
+exports.TYPE_FOOD = "FOOD";
+exports.TYPE_PUB_BAR = "PUB_BAR";
+exports.TYPE_ACTIVITIES = "ACTIVITIES";
+exports.TYPE_TEMPLE = "TEMPLE";
+
+exports.STATUS_UPCOMING = "UPCOMING";
+exports.STATUS_ONGOING = "ONGOING";
+exports.STATUS_PAST = "PAST";
