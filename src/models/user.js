@@ -1,71 +1,109 @@
-// const { LEVEL_BRONZE, LEVEL_SILVER, LEVEL_GOLD, LEVEL_PLATINUM } = require("../config/constant");
+// const { Sequelize, DataTypes } = require("sequelize");
+// const sequelize = new Sequelize();
 
 module.exports = (sequelize, DataTypes) => {
+  // module.exports = () => {
   const User = sequelize.define(
     "User",
     {
-      firstName: {
+      email: {
         type: DataTypes.STRING,
         allowNull: false,
-        validate: { notEmpty: true }
+        unique: true,
+        validate: {
+          isEmail: true
+        }
       },
-      lastName: {
+      password: {
         type: DataTypes.STRING,
-        allowNull: false,
-        validate: { notEmpty: true }
+        allowNull: false
       },
       phone: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
-        validate: { is: /^[0-9]{10}$/ }
+        validate: {
+          is: /^[0-9]{10}$/
+        }
       },
-      email: {
+      firstName: {
         type: DataTypes.STRING,
         allowNull: false,
-        unique: true,
-        validate: { isEmail: true }
+        validate: {
+          notEmpty: true
+        }
       },
-      password: {
+      lastName: {
         type: DataTypes.STRING,
         allowNull: false,
-        validate: { notEmpty: true }
+        validate: {
+          notEmpty: true
+        }
       },
-      lineId: {
-        // optional
+      profileImage: {
         type: DataTypes.STRING,
-        unique: true,
-        validate: { notEmpty: true }
+        allowNull: true
       },
-      address: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: { notEmpty: true }
-      },
-      birthdate: {
+      birthDate: {
         type: DataTypes.DATEONLY,
         allowNull: false,
-        validate: { isDate: true }
+        validate: {
+          notEmpty: true
+        }
       },
-      point: {
-        // add by system
-        type: DataTypes.INTEGER,
-        defaultValue: 0
+      bio: {
+        type: DataTypes.STRING,
+        allowNull: true
       },
-      totalSpend: {
-        // add by system
-        type: DataTypes.DECIMAL(10, 2),
-        defaultValue: 0.0
+      username: {
+        type: DataTypes.STRING,
+        allowNull: true
       }
-      //   level: {
-      //     // add by system
-      //     type: DataTypes.ENUM(LEVEL_BRONZE, LEVEL_SILVER, LEVEL_GOLD, LEVEL_PLATINUM),
-      //     defaultValue: "LEVEL_BRONZE"
-      //   }
     },
-    {
-      underscored: true
-    }
+    { underscored: true }
   );
+
+  User.associate = (db) => {
+    User.hasMany(db.Event, {
+      foreignKey: {
+        name: "userId",
+        allowNull: false
+      },
+      onDelete: "RESTRICT"
+    });
+
+    User.hasMany(db.eventUser, {
+      foreignKey: {
+        name: "userId",
+        allowNull: false
+      },
+      onDelete: "RESTRICT"
+    });
+
+    User.hasMany(db.chatGroup, {
+      foreignKey: {
+        name: "userId",
+        allowNull: false
+      },
+      onDelete: "RESTRICT"
+    });
+
+    User.hasMany(db.socialLink, {
+      foreignKey: {
+        name: "userId",
+        allowNull: false
+      },
+      onDelete: "RESTRICT"
+    });
+
+    User.hasMany(db.postFeed, {
+      foreignKey: {
+        name: "userId",
+        allowNull: false
+      },
+      onDelete: "RESTRICT"
+    });
+  };
+
   return User;
 };
