@@ -10,6 +10,8 @@ const chalk = require("chalk");
 
 // require - router
 const authRoute = require("./routes/auth-route");
+const userRoute = require("./routes/user-route");
+const eventRoute = require("./routes/event-route");
 
 // require - middleware
 const notFoundMiddleWare = require("./middlewares/not-found");
@@ -25,6 +27,8 @@ app.use(express.json()); // to get BODY data
 
 // router
 app.use("/auth", authRoute);
+app.use("/user", userRoute);
+app.use("/events", eventRoute);
 
 // middleware error
 app.use(notFoundMiddleWare);
