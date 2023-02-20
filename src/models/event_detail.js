@@ -1,10 +1,10 @@
 const {
   TYPE_CAFE,
-  TYPE_SPORTS,
   TYPE_FOOD,
-  TYPE_PUB_BAR,
-  TYPE_ACTIVITIES,
-  TYPE_TEMPLE,
+  TYPE_GAME,
+  TYPE_PARTY,
+  TYPE_SPORT,
+  TYPE_TRAVEL,
   STATUS_UPCOMING,
   STATUS_ONGOING,
   STATUS_PAST
@@ -27,14 +27,7 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: true
       },
       category: {
-        type: DataTypes.ENUM(
-          TYPE_CAFE,
-          TYPE_SPORTS,
-          TYPE_FOOD,
-          TYPE_PUB_BAR,
-          TYPE_ACTIVITIES,
-          TYPE_TEMPLE
-        )
+        type: DataTypes.ENUM(TYPE_CAFE, TYPE_FOOD, TYPE_GAME, TYPE_PARTY, TYPE_SPORT, TYPE_TRAVEL)
       },
       date: {
         type: DataTypes.DATEONLY,
