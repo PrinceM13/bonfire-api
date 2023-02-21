@@ -2,7 +2,6 @@
 // sequelize.sync({ alter: true });
 
 require("dotenv").config();
-
 // setting cors for socket.io
 const corsOptions = {
   origin: process.env.CLIENT_URL,
@@ -24,6 +23,7 @@ const chalk = require("chalk");
 
 // require - router
 const authRoute = require("./routes/auth-route");
+const userRoute = require("./routes/user-route");
 
 // require - middleware
 const notFoundMiddleWare = require("./middlewares/not-found");
@@ -38,7 +38,7 @@ app.use(express.json()); // to get BODY data
 // router
 app.use("/auth", authRoute);
 app.use("/user", userRoute);
-app.use("/events", eventRoute);
+// app.use("/events", eventRoute);
 
 io.on("connection", (socket) => {
   console.log("a user connected");
