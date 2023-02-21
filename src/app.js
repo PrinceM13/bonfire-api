@@ -37,6 +37,8 @@ app.use(express.json()); // to get BODY data
 
 // router
 app.use("/auth", authRoute);
+app.use("/user", userRoute);
+app.use("/events", eventRoute);
 
 io.on("connection", (socket) => {
   console.log("a user connected");
