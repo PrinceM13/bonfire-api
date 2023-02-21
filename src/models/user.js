@@ -67,6 +67,14 @@ module.exports = (sequelize, DataTypes) => {
       company: {
         type: DataTypes.STRING,
         allowNull: true
+      },
+      googleId: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: true,
+        validate: {
+          notEmpty: true
+        }
       }
     },
     { underscored: true }
