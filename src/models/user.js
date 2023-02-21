@@ -57,7 +57,24 @@ module.exports = (sequelize, DataTypes) => {
       },
       username: {
         type: DataTypes.STRING,
+        allowNull: true,
+        unique: true
+      },
+      education: {
+        type: DataTypes.STRING,
         allowNull: true
+      },
+      company: {
+        type: DataTypes.STRING,
+        allowNull: true
+      },
+      googleId: {
+        type: DataTypes.STRING,
+        allowNull: true,
+        unique: true,
+        validate: {
+          notEmpty: true
+        }
       }
     },
     { underscored: true }
@@ -97,6 +114,14 @@ module.exports = (sequelize, DataTypes) => {
     });
 
     User.hasMany(db.postFeed, {
+      foreignKey: {
+        name: "userId",
+        allowNull: false
+      },
+      onDelete: "RESTRICT"
+    });
+
+    User.hasMany(db.userCategory, {
       foreignKey: {
         name: "userId",
         allowNull: false
