@@ -37,23 +37,30 @@ exports.register = async (req, res, next) => {
 exports.login = async (req, res, next) => {
   try {
     // get data from body
-    const data = validateLogin(req.body);
+    const data = req.body; // need to fix validator
+    // const data = validateLogin(req.body);
 
     // check if user exist in db
-    const user = await User.findOne({
-      where: { [Op.or]: [{ email: data.email || "" }, { googleId: data.googleId || "" }] }
-    });
+    let user;
+    if (!req?.googleId) {
+      user = await User.findOne({ where: { email: data.email } });
+    } else {
+      user = await User.findOne({ where: { googleId: data.googleId } });
+    }
     // throw error (invalid user)
     if (!user) {
       createError("invalid email or password", 400);
     }
 
     // compare password
-    const isCorrect = await bcrypt.compare(data.password, user.password);
-    // throw error (wrong password)
-    if (!isCorrect) {
-      createError("invalid email or password", 400);
+    if (!req?.googleId) {
+      const isCorrect = await bcrypt.compare(data.password, user.password);
+      // throw error (wrong password)
+      if (!isCorrect) {
+        createError("invalid email or password", 400);
+      }
     }
+
     // generate token if both email and password are valid
     const accessToken = jwt.sign(
       {
