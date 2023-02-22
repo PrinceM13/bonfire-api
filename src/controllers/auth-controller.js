@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { Op } = require("sequelize");
+const { validateRegister, validateLogin } = require("../validators/auth-validator");
 
 const { User } = require("../models");
 const createError = require("../utils/create-error");
@@ -8,7 +9,7 @@ const createError = require("../utils/create-error");
 exports.register = async (req, res, next) => {
   try {
     // get data from body
-    const data = req.body;
+    const data = validateRegister(req.body);
 
     // check if email is already exist (use email as username)
     const user = await User.findOne({
@@ -36,7 +37,7 @@ exports.register = async (req, res, next) => {
 exports.login = async (req, res, next) => {
   try {
     // get data from body
-    const data = req.body;
+    const data = validateLogin(req.body);
 
     // check if user exist in db
     const user = await User.findOne({
