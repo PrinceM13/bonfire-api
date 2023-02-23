@@ -21,20 +21,10 @@ const registerSchema = Joi.object({
     "date.max": "Birth date must be before today",
     "any.required": "Birth date is required"
   }),
-  method: Joi.string().valid("email", "googleId").required(),
-  email: Joi.string().when("method", {
-    is: "email",
-    then: Joi.string()
-      .email({ tlds: false })
-      .required()
-      .messages({ "string.empty": "email is required" }),
-    otherwise: Joi.forbidden()
-  }),
-  googleId: Joi.string().when("method", {
-    is: "googleId",
-    then: Joi.string().required(),
-    otherwise: Joi.forbidden()
-  }),
+  email: Joi.string()
+    .email({ tlds: false })
+    .required()
+    .messages({ "string.empty": "email is required" }),
 
   password: Joi.string()
     // .alphanum()
@@ -65,21 +55,21 @@ const registerSchema = Joi.object({
 exports.validateRegister = validate(registerSchema);
 
 const loginSchema = Joi.object({
-  method: Joi.string().valid("email", "googleId").required(),
-  email: Joi.string().when("method", {
-    is: "email",
-    then: Joi.string()
-      .email({ tlds: false })
-      .required()
-      .messages({ "string.empty": "email is required" }),
-    otherwise: Joi.forbidden()
-  }),
-  password: Joi.string().required().messages({ "string.empty": "Password is required" }),
-  googleId: Joi.string().when("method", {
-    is: "googleId",
-    then: Joi.string().required(),
-    otherwise: Joi.forbidden()
-  })
+  email: Joi.string()
+    .email({ tlds: false })
+    .required()
+    .messages({ "string.empty": "email is required" }),
+  password: Joi.string().required().messages({ "string.empty": "Password is required" })
 });
 
 exports.validateLogin = validate(loginSchema);
+
+const loginWithGoogleSchema = Joi.object({
+  googleId: Joi.string().required(),
+  email: Joi.string()
+    .email({ tlds: false })
+    .required()
+    .messages({ "string.empty": "email is required" })
+});
+
+exports.validateLoginWithGoogle = validate(loginWithGoogleSchema);
