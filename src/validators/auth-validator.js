@@ -2,30 +2,30 @@ const Joi = require("joi");
 const validate = require("./validate");
 
 const registerSchema = Joi.object({
+  firstName: Joi.string().trim().required().messages({
+    "string.empty": "First name is required"
+  }),
+  lastName: Joi.string().trim().required().messages({
+    "string.empty": "Last name is required"
+  }),
+  email: Joi.string()
+    .email({ tlds: false })
+    .required()
+    .messages({ "string.empty": "Email is required" }),
   phone: Joi.string()
     .length(10)
     .pattern(/^[0][0-9]{9}$/)
     .required()
     .messages({
-      "string.empty": "telephone number is required",
-      "string.pattern.base": "telephone number must start with 0 and contain with 10 characters"
+      "string.empty": "Telephone number is required",
+      "string.pattern.base":
+        "Telephone number must start with 0 and contain with 10 characters long"
     }),
-  firstName: Joi.string().trim().required().messages({
-    "string.empty": "first name is required"
-  }),
-  lastName: Joi.string().trim().required().messages({
-    "string.empty": "last name is required"
-  }),
   birthDate: Joi.date().max("now").required().messages({
     "date.base": "Invalid birth date format",
     "date.max": "Birth date must be before today",
     "any.required": "Birth date is required"
   }),
-  email: Joi.string()
-    .email({ tlds: false })
-    .required()
-    .messages({ "string.empty": "email is required" }),
-
   password: Joi.string()
     // .alphanum()
     // .min(6)
@@ -35,8 +35,8 @@ const registerSchema = Joi.object({
     .messages({
       "string.empty": "password is required",
       "string.pattern.base":
-        "Telephone number must start with 0 and contain with 10 characters long"
-      // "string.min": "password must have at least 6 characters"
+        "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character, and must contain at least 8 characters."
+      // "string.min": "password must have at least 8 characters"
       // "string.alphanum": "password must contain number or alphabet"
     }), // if want to use easy register for testing, we will open the comment and close regex, error, and min(8)
   confirmPassword: Joi.string()
