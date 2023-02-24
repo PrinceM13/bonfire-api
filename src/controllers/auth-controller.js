@@ -1,7 +1,11 @@
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { Op } = require("sequelize");
-const { validateRegister, validateLogin } = require("../validators/auth-validator");
+const {
+  validateRegister,
+  validateLogin,
+  validateLoginWithGoogle
+} = require("../validators/auth-validator");
 
 const { User } = require("../models");
 const createError = require("../utils/create-error");
@@ -37,8 +41,15 @@ exports.register = async (req, res, next) => {
 exports.login = async (req, res, next) => {
   try {
     // get data from body
-    const data = req.body; // need to fix validator
+    // const data = req.body; // need to fix validator
     // const data = validateLogin(req.body);
+    let data;
+    if (!req?.googleId) {
+      data = validateLogin(req.body);
+    } else {
+      const dataToValidate = { email: req.body.email, googleId: req.body.googleId };
+      data = validateLoginWithGoogle(dataToValidate);
+    }
 
     // check if user exist in db
     let user;
