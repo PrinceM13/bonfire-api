@@ -31,14 +31,11 @@ const registerSchema = Joi.object({
     // .min(6)
     .min(8)
     .regex(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+])[A-Za-z\d!@#$%^&*()_+]{8,}$/) //(?=.*\d) this mean must contain at least 1 digit in each condition
-    .error(
-      new Error(
-        "Password must contain at least one lowercase letter, one uppercase letter, one number, and one special character, and must contain at least 8 characters."
-      )
-    )
     .required()
     .messages({
-      "string.empty": "password is required"
+      "string.empty": "password is required",
+      "string.pattern.base":
+        "Telephone number must start with 0 and contain with 10 characters long"
       // "string.min": "password must have at least 6 characters"
       // "string.alphanum": "password must contain number or alphabet"
     }), // if want to use easy register for testing, we will open the comment and close regex, error, and min(8)
