@@ -3,18 +3,18 @@
 
 module.exports = (sequelize, DataTypes) => {
   // module.exports = () => {
-  const eventTag = sequelize.define("eventTag", {}, { underscored: true });
+  const EventTag = sequelize.define("EventTag", {}, { underscored: true });
 
-  eventTag.associate = (db) => {
-    eventTag.belongsTo(db.eventDetail, {
+  EventTag.associate = (db) => {
+    EventTag.belongsTo(db.EventDetail, {
       foreignKey: {
-        name: "eventDetailId",
+        name: "EventDetailId",
         allowNull: false
       },
       onDelete: "RESTRICT"
     });
 
-    eventTag.belongsTo(db.Tag, {
+    EventTag.belongsTo(db.Tag, {
       foreignKey: {
         name: "tagId",
         allowNull: false
@@ -23,5 +23,5 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
-  return eventTag;
+  return EventTag;
 };

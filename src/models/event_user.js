@@ -3,9 +3,9 @@
 
 module.exports = (sequelize, DataTypes) => {
   // module.exports = () => {
-  const eventUser = sequelize.define("eventUser", {}, { underscored: true });
-  eventUser.associate = (db) => {
-    eventUser.belongsTo(db.User, {
+  const EventUser = sequelize.define("EventUser", {}, { underscored: true });
+  EventUser.associate = (db) => {
+    EventUser.belongsTo(db.User, {
       foreignKey: {
         name: "userId",
         allowNull: false
@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: "RESTRICT"
     });
 
-    eventUser.belongsTo(db.Event, {
+    EventUser.belongsTo(db.Event, {
       foreignKey: {
         name: "eventId",
         allowNull: false
@@ -22,5 +22,5 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
-  return eventUser;
+  return EventUser;
 };

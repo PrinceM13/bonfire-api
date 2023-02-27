@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   Tag.associate = (db) => {
-    Tag.hasMany(db.eventTag, {
+    Tag.hasMany(db.EventTag, {
       foreignKey: {
         name: "tagId",
         allowNull: false

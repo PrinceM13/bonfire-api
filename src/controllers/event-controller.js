@@ -1,13 +1,27 @@
-const { Event, eventDetail, User } = require("../models");
+const { Event, EventDetail, User } = require("../models");
+const createError = require("../utils/create-error");
 
 exports.createEvent = async (req, res, next) => {
   try {
     const event = await Event.create({
-      ...req.body,
       userId: req.user.id,
-      include: { model: eventDetail }
+      title: req.body.title
     });
-    res.status(200).json({ event });
+
+    await EventDetail.create({
+      eventId: event.id,
+      date: req.body.date,
+      time: req.body.time,
+      latitude: req.body.latitude,
+      longitude: req.body.longitude
+    });
+
+    const createdEvent = await Event.findOne({
+      where: { id: event.id },
+      include: [{ model: EventDetail }]
+    });
+
+    res.status(200).json({ createdEvent });
   } catch (err) {
     next(err);
   }
@@ -17,7 +31,7 @@ exports.getAllEvents = async (req, res, next) => {
   try {
     const events = await Event.findAll({
       include: {
-        model: eventDetail
+        model: EventDetail
       }
     });
     res.status(200).json({ events });
@@ -26,31 +40,35 @@ exports.getAllEvents = async (req, res, next) => {
   }
 };
 
-exports.getEventsById = async (req, res, next) => {
-  try {
-    const event = await Event.findOne({
-      where: { id: req.params.eventId },
-      include: [
-        {
-          model: eventDetail
-        },
-        {
-          model: User
-        }
-      ]
-    });
-    res.status(200).json({ event });
-  } catch (err) {
-    next(err);
-  }
-};
+// exports.getEventsById = async (req, res, next) => {
+//   try {
+//     const event = await Event.findOne({
+//       where: { id: req.params.eventId },
+//       include: [
+//         {
+//           model: EventDetail
+//         },
+//         {
+//           model: User
+//         }
+//       ]
+//     });
+//     res.status(200).json({ event });
+//   } catch (err) {
+//     next(err);
+//   }
+// };
 
 exports.updateEvents = async (req, res, next) => {
   try {
-    const eventUpdate = await Event.update(req.body, {
-      where: { id: req.params.eventId, userId: req.user.id },
-      include: { model: eventDetail }
+    const [eventUpdate] = await Event.update(
+      { title: req.body.title },
+      { where: { id: +req.params.eventId } }
+    );
+    const [eventDetailUpdate] = await EventDetail.update(req.body, {
+      where: { eventId: +req.params.eventId }
     });
+
     res.status(200).json({ message: `event was successfully updated` });
   } catch (err) {
     next(err);
@@ -59,9 +77,21 @@ exports.updateEvents = async (req, res, next) => {
 
 exports.deleteEvents = async (req, res, next) => {
   try {
-    const eventDelete = await Event.destroy({
-      where: { userId: req.user.id, eventId: req.params.eventId }
+    const eventDelete = await Event.findOne({
+      where: { id: +req.params.eventId, userId: req.user.id }
     });
+
+    if (!eventDelete) {
+      createError("invalid event", 400);
+    }
+
+    const eventDetailDelete = await EventDetail.findOne({
+      where: { eventId: +req.params.eventId }
+    });
+
+    await eventDetailDelete.destroy();
+    await eventDelete.destroy();
+
     res.status(204).json();
   } catch (err) {
     next(err);

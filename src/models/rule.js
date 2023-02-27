@@ -19,9 +19,9 @@ module.exports = (sequelize, DataTypes) => {
   );
 
   Rule.associate = (db) => {
-    Rule.belongsTo(db.eventDetail, {
+    Rule.belongsTo(db.EventDetail, {
       foreignKey: {
-        name: "eventDetailId",
+        name: "EventDetailId",
         allowNull: false
       },
       onDelete: "RESTRICT"
