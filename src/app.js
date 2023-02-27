@@ -24,10 +24,12 @@ const chalk = require("chalk");
 // require - router
 const authRoute = require("./routes/auth-route");
 const userRoute = require("./routes/user-route");
+const eventRoute = require("./routes/event-route");
 
 // require - middleware
 const notFoundMiddleWare = require("./middlewares/not-found");
 const errorMiddleWare = require("./middlewares/error");
+const authenticate = require("./middlewares/passport-authen");
 
 // middleware
 app.use(cors()); // to connect with front-end through web browser
@@ -38,7 +40,7 @@ app.use(express.json()); // to get BODY data
 // router
 app.use("/auth", authRoute);
 app.use("/user", userRoute);
-// app.use("/events", eventRoute);
+app.use("/events", authenticate, eventRoute);
 
 io.on("connection", (socket) => {
   console.log("a user connected");

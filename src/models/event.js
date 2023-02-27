@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: "RESTRICT"
     });
 
-    Event.hasMany(db.eventUser, {
+    Event.hasMany(db.EventUser, {
       foreignKey: {
         name: "eventId",
         allowNull: false
@@ -34,7 +34,7 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: "RESTRICT"
     });
 
-    Event.hasMany(db.chatGroup, {
+    Event.hasMany(db.ChatGroup, {
       foreignKey: {
         name: "eventId",
         allowNull: false
@@ -42,7 +42,7 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: "RESTRICT"
     });
 
-    Event.hasOne(db.eventDetail, {
+    Event.hasOne(db.EventDetail, {
       foreignKey: {
         name: "eventId",
         allowNull: false

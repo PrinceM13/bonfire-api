@@ -15,8 +15,8 @@ const {
 
 module.exports = (sequelize, DataTypes) => {
   // module.exports = () => {
-  const eventDetail = sequelize.define(
-    "eventDetail",
+  const EventDetail = sequelize.define(
+    "EventDetail",
     {
       image: {
         type: DataTypes.STRING,
@@ -59,8 +59,8 @@ module.exports = (sequelize, DataTypes) => {
     { underscored: true }
   );
 
-  eventDetail.associate = (db) => {
-    eventDetail.belongsTo(db.Event, {
+  EventDetail.associate = (db) => {
+    EventDetail.belongsTo(db.Event, {
       foreignKey: {
         name: "eventId",
         allowNull: false
@@ -68,22 +68,22 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: "RESTRICT"
     });
 
-    eventDetail.hasMany(db.eventTag, {
+    EventDetail.hasMany(db.EventTag, {
       foreignKey: {
-        name: "eventDetailId",
+        name: "EventDetailId",
         allowNull: false
       },
       onDelete: "RESTRICT"
     });
 
-    eventDetail.hasOne(db.Rule, {
+    EventDetail.hasOne(db.Rule, {
       foreignKey: {
-        name: "eventDetailId",
+        name: "EventDetailId",
         allowNull: false
       },
       onDelete: "RESTRICT"
     });
   };
 
-  return eventDetail;
+  return EventDetail;
 };

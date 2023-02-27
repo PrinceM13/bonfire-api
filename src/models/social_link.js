@@ -5,8 +5,8 @@ const { TYPE_FACEBOOK, TYPE_IG, TYPE_LINE } = require("../config/constants");
 
 module.exports = (sequelize, DataTypes) => {
   // module.exports = () => {
-  const socialLink = sequelize.define(
-    "socialLink",
+  const SocialLink = sequelize.define(
+    "SocialLink",
     {
       linkUrl: {
         type: DataTypes.STRING,
@@ -20,8 +20,8 @@ module.exports = (sequelize, DataTypes) => {
     { underscored: true }
   );
 
-  socialLink.associate = (db) => {
-    socialLink.belongsTo(db.User, {
+  SocialLink.associate = (db) => {
+    SocialLink.belongsTo(db.User, {
       foreignKey: {
         name: "userId",
         allowNull: false
@@ -30,5 +30,5 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
-  return socialLink;
+  return SocialLink;
 };

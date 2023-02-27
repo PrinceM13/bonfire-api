@@ -12,8 +12,8 @@ const {
 
 module.exports = (sequelize, DataTypes) => {
   // module.exports = () => {
-  const userCategory = sequelize.define(
-    "userCategory",
+  const UserCategory = sequelize.define(
+    "UserCategory",
     {
       category: {
         type: DataTypes.ENUM(TYPE_CAFE, TYPE_FOOD, TYPE_GAME, TYPE_PARTY, TYPE_SPORT, TYPE_TRAVEL)
@@ -22,8 +22,8 @@ module.exports = (sequelize, DataTypes) => {
     { underscored: true }
   );
 
-  userCategory.associate = (db) => {
-    userCategory.belongsTo(db.User, {
+  UserCategory.associate = (db) => {
+    UserCategory.belongsTo(db.User, {
       foreignKey: {
         name: "userId",
         allowNull: false
@@ -32,5 +32,5 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
-  return userCategory;
+  return UserCategory;
 };

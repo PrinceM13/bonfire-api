@@ -3,8 +3,8 @@
 
 module.exports = (sequelize, DataTypes) => {
   // module.exports = () => {
-  const chatGroup = sequelize.define(
-    "chatGroup",
+  const ChatGroup = sequelize.define(
+    "ChatGroup",
     {
       message: {
         type: DataTypes.STRING,
@@ -14,8 +14,8 @@ module.exports = (sequelize, DataTypes) => {
     { underscored: true }
   );
 
-  chatGroup.associate = (db) => {
-    chatGroup.belongsTo(db.User, {
+  ChatGroup.associate = (db) => {
+    ChatGroup.belongsTo(db.User, {
       foreignKey: {
         name: "userId",
         allowNull: false
@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: "RESTRICT"
     });
 
-    chatGroup.belongsTo(db.Event, {
+    ChatGroup.belongsTo(db.Event, {
       foreignKey: {
         name: "eventId",
         allowNull: false
@@ -32,5 +32,5 @@ module.exports = (sequelize, DataTypes) => {
     });
   };
 
-  return chatGroup;
+  return ChatGroup;
 };

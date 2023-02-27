@@ -89,7 +89,7 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: "RESTRICT"
     });
 
-    User.hasMany(db.eventUser, {
+    User.hasMany(db.EventUser, {
       foreignKey: {
         name: "userId",
         allowNull: false
@@ -97,7 +97,7 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: "RESTRICT"
     });
 
-    User.hasMany(db.chatGroup, {
+    User.hasMany(db.ChatGroup, {
       foreignKey: {
         name: "userId",
         allowNull: false
@@ -105,7 +105,7 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: "RESTRICT"
     });
 
-    User.hasMany(db.socialLink, {
+    User.hasMany(db.SocialLink, {
       foreignKey: {
         name: "userId",
         allowNull: false
@@ -121,7 +121,7 @@ module.exports = (sequelize, DataTypes) => {
       onDelete: "RESTRICT"
     });
 
-    User.hasMany(db.userCategory, {
+    User.hasMany(db.UserCategory, {
       foreignKey: {
         name: "userId",
         allowNull: false
