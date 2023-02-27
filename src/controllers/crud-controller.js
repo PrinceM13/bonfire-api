@@ -56,7 +56,11 @@ exports.getAllRecords = (Model, recordName = "") => {
   return async (req, res, next) => {
     try {
       // get all records from table
-      records = await Model.findAll();
+      if (recordName === "email") {
+        records = await Model.findAll({ attributes: ["email"] });
+      } else {
+        records = await Model.findAll();
+      }
 
       // response with all records data
       res.status(200).json({ records });
