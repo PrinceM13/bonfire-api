@@ -48,7 +48,7 @@ exports.getEventsById = async (req, res, next) => {
 exports.updateEvents = async (req, res, next) => {
   try {
     const eventUpdate = await Event.update(req.body, {
-      where: { id: req.params.eventId },
+      where: { id: req.params.eventId, userId: req.user.id },
       include: { model: eventDetail }
     });
     res.status(200).json({ message: `event was successfully updated` });
