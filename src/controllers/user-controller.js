@@ -25,7 +25,7 @@ exports.editMyProfile = async (req, res, next) => {
     const value = { profileImage, username, bio, education, company };
 
     const updateUser = await User.update(value, { where: { id: req.user.id } });
-    res.status(200).json({ value });
+    res.status(200).json({ updateUser });
   } catch (err) {
     next(err);
   }
