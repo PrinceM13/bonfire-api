@@ -39,7 +39,7 @@ app.use(express.json()); // to get BODY data
 
 // router
 app.use("/auth", authRoute);
-app.use("/user", userRoute);
+app.use("/user", authenticate, userRoute);
 app.use("/events", authenticate, eventRoute);
 
 io.on("connection", (socket) => {

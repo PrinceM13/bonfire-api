@@ -1,4 +1,4 @@
-const { Event, EventDetail, User } = require("../models");
+const { Event, EventDetail, User, EventUser } = require("../models");
 const createError = require("../utils/create-error");
 
 exports.createEvent = async (req, res, next) => {
@@ -14,6 +14,11 @@ exports.createEvent = async (req, res, next) => {
       time: req.body.time,
       latitude: req.body.latitude,
       longitude: req.body.longitude
+    });
+
+    await EventUser.create({
+      userId: req.user.id,
+      eventId: event.id
     });
 
     const createdEvent = await Event.findOne({
@@ -89,7 +94,12 @@ exports.deleteEvents = async (req, res, next) => {
       where: { eventId: +req.params.eventId }
     });
 
+    const eventUserDelete = await EventUser.findOne({
+      where: { eventId: +req.params.eventId }
+    });
+
     await eventDetailDelete.destroy();
+    await eventUserDelete.destroy();
     await eventDelete.destroy();
 
     res.status(204).json();
