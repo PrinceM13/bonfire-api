@@ -3,7 +3,7 @@ const { TYPE_FACEBOOK, TYPE_IG, TYPE_LINE } = require("../config/constants");
 
 exports.getMyProfile = async (req, res, next) => {
   try {
-    const myProfile = await User.findAll({
+    const myProfile = await User.findOne({
       where: { id: req.user.id },
       attributes: { exclude: ["password"] },
       include: [
@@ -20,6 +20,7 @@ exports.getMyProfile = async (req, res, next) => {
 };
 
 exports.editMyProfile = async (req, res, next) => {
+  console.log("I TOOONNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN", req.body);
   try {
     const { profileImage, username, bio, education, company } = req.body;
     const value = { profileImage, username, bio, education, company };
