@@ -3,7 +3,7 @@ const { TYPE_FACEBOOK, TYPE_IG, TYPE_LINE } = require("../config/constants");
 
 exports.getMyProfile = async (req, res, next) => {
   try {
-    const myProfile = await User.findAll({
+    const myProfile = await User.findOne({
       where: { id: req.user.id },
       attributes: { exclude: ["password"] },
       include: [
