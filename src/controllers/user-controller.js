@@ -23,6 +23,7 @@ exports.getMyProfile = async (req, res, next) => {
 };
 
 exports.editMyProfile = async (req, res, next) => {
+  console.log("I TOOONNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN", req.body);
   try {
     let profileUrl;
 
