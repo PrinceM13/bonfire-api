@@ -75,7 +75,7 @@ exports.login = async (req, res, next) => {
     // findall
     // const eventUsers = UserEvent.findall where ---> userId = user.id ---> [{userId, eventId},{}]
     const eventUsers = await EventUser.findAll({
-      where: { userId: req.user.id }
+      where: { userId: user.id }
     });
 
     // generate token if both email and password are valid
