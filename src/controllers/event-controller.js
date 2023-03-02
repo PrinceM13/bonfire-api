@@ -1,4 +1,4 @@
-const { Event, EventDetail, User, EventUser } = require("../models");
+const { Event, EventDetail, User, EventUser, Rule, Tag, EventTag } = require("../models");
 const createError = require("../utils/create-error");
 
 exports.createEvent = async (req, res, next) => {
@@ -8,22 +8,51 @@ exports.createEvent = async (req, res, next) => {
       title: req.body.title
     });
 
-    await EventDetail.create({
+    const eventDetail = await EventDetail.create({
       eventId: event.id,
+      category: req.body.category,
+      detail: req.body.detail,
       date: req.body.date,
       time: req.body.time,
+      location: req.body.location,
       latitude: req.body.latitude,
       longitude: req.body.longitude
     });
 
+    await Rule.create({
+      EventDetailId: eventDetail.id,
+      age: req.body.age,
+      paticipant: req.body.paticipant
+    });
+
     await EventUser.create({
       userId: req.user.id,
-      eventId: event.id
+      eventId: event.id,
+      status: req.body.status
     });
+
+    const tags = req.body.titleTag || [];
+
+    for (let i = 0; i < tags.length; i++) {
+      const tag = tags[i];
+      const createdTag = await Tag.create({
+        titleTag: tag
+      });
+
+      await EventTag.create({
+        EventDetailId: eventDetail.id,
+        tagId: createdTag.id
+      });
+    }
 
     const createdEvent = await Event.findOne({
       where: { id: event.id },
-      include: [{ model: EventDetail }]
+      include: [
+        {
+          model: EventDetail,
+          include: [{ model: Rule }, { model: EventTag, include: { model: Tag } }]
+        }
+      ]
     });
 
     res.status(200).json({ createdEvent });
