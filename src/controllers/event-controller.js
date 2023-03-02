@@ -4,37 +4,6 @@ const { Event, EventDetail, User, EventUser, Rule, Tag, EventTag } = require("..
 const createError = require("../utils/create-error");
 const cloudinary = require("../utils/cloudinary");
 
-// exports.createEvent = async (req, res, next) => {
-//   try {
-//     const event = await Event.create({
-//       userId: req.user.id,
-//       title: req.body.title
-//     });
-
-//     await EventDetail.create({
-//       eventId: event.id,
-//       date: req.body.date,
-//       time: req.body.time,
-//       latitude: req.body.latitude,
-//       longitude: req.body.longitude
-//     });
-
-//     await EventUser.create({
-//       userId: req.user.id,
-//       eventId: event.id
-//     });
-
-//     const createdEvent = await Event.findOne({
-//       where: { id: event.id },
-//       include: [{ model: EventDetail }]
-//     });
-
-//     res.status(200).json({ createdEvent });
-//   } catch (err) {
-//     next(err);
-//   }
-// };
-
 exports.createEvent = async (req, res, next) => {
   try {
     const event = await Event.create({
@@ -161,6 +130,10 @@ exports.updateEvents = async (req, res, next) => {
     res.status(200).json({ message: `event was successfully updated` });
   } catch (err) {
     next(err);
+  } finally {
+    if (req.file) {
+      fs.unlinkSync(req.file.path);
+    }
   }
 };
 
