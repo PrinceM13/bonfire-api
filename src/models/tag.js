@@ -6,7 +6,7 @@ module.exports = (sequelize, DataTypes) => {
   const Tag = sequelize.define(
     "Tag",
     {
-      title: {
+      titleTag: {
         type: DataTypes.STRING,
         allowNull: true
       }
