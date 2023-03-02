@@ -1,5 +1,8 @@
+const fs = require("fs");
+
 const { User, EventUser, SocialLink, Event, EventDetail, UserCategory } = require("../models");
 const { TYPE_FACEBOOK, TYPE_IG, TYPE_LINE } = require("../config/constants");
+const cloudinary = require("../utils/cloudinary");
 
 exports.getMyProfile = async (req, res, next) => {
   try {
@@ -22,13 +25,24 @@ exports.getMyProfile = async (req, res, next) => {
 exports.editMyProfile = async (req, res, next) => {
   console.log("I TOOONNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN", req.body);
   try {
+    let profileUrl;
+
+    if (req.file) {
+      profileUrl = await cloudinary.upload(req.file?.path, null, "User");
+    }
+
     const { profileImage, username, bio, education, company } = req.body;
-    const value = { profileImage, username, bio, education, company };
+    const value = { profileImage: profileUrl, username, bio, education, company };
 
     const updateUser = await User.update(value, { where: { id: req.user.id } });
-    res.status(200).json({ updateUser });
+
+    res.status(200).json({ value });
   } catch (err) {
     next(err);
+  } finally {
+    if (req.file) {
+      fs.unlinkSync(req.file.path);
+    }
   }
 };
 

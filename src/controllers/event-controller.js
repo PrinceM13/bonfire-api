@@ -1,5 +1,8 @@
+const fs = require("fs");
+
 const { Event, EventDetail, User, EventUser, Rule, Tag, EventTag } = require("../models");
 const createError = require("../utils/create-error");
+const cloudinary = require("../utils/cloudinary");
 
 exports.createEvent = async (req, res, next) => {
   try {
@@ -8,8 +11,15 @@ exports.createEvent = async (req, res, next) => {
       title: req.body.title
     });
 
+    let eventUrl;
+
+    if (req.file) {
+      eventUrl = await cloudinary.upload(req.file?.path, null, "Event");
+    }
+
     const eventDetail = await EventDetail.create({
       eventId: event.id,
+      image: eventUrl,
       category: req.body.category,
       detail: req.body.detail,
       date: req.body.date,
@@ -58,6 +68,10 @@ exports.createEvent = async (req, res, next) => {
     res.status(200).json({ createdEvent });
   } catch (err) {
     next(err);
+  } finally {
+    if (req.file) {
+      fs.unlinkSync(req.file.path);
+    }
   }
 };
 
@@ -95,17 +109,31 @@ exports.getAllEvents = async (req, res, next) => {
 
 exports.updateEvents = async (req, res, next) => {
   try {
+    let updateEventImage;
+
+    if (req.file) {
+      updateEventImage = await cloudinary.upload(req.file?.path, null, "Event");
+    }
+
+    const { image, detail, date, time, location, latitude, longitude } = req.body;
+    const value = { image: updateEventImage, detail, date, time, location, latitude, longitude };
+
     const [eventUpdate] = await Event.update(
       { title: req.body.title },
       { where: { id: +req.params.eventId } }
     );
-    const [eventDetailUpdate] = await EventDetail.update(req.body, {
+
+    const [eventDetailUpdate] = await EventDetail.update(value, {
       where: { eventId: +req.params.eventId }
     });
 
     res.status(200).json({ message: `event was successfully updated` });
   } catch (err) {
     next(err);
+  } finally {
+    if (req.file) {
+      fs.unlinkSync(req.file.path);
+    }
   }
 };
 
