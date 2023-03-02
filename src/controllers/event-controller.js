@@ -1,8 +1,45 @@
+const fs = require("fs");
+
 const { Event, EventDetail, User, EventUser } = require("../models");
 const createError = require("../utils/create-error");
+const cloudinary = require("../utils/cloudinary");
+
+// exports.createEvent = async (req, res, next) => {
+//   try {
+//     const event = await Event.create({
+//       userId: req.user.id,
+//       title: req.body.title
+//     });
+
+//     await EventDetail.create({
+//       eventId: event.id,
+//       date: req.body.date,
+//       time: req.body.time,
+//       latitude: req.body.latitude,
+//       longitude: req.body.longitude
+//     });
+
+//     await EventUser.create({
+//       userId: req.user.id,
+//       eventId: event.id
+//     });
+
+//     const createdEvent = await Event.findOne({
+//       where: { id: event.id },
+//       include: [{ model: EventDetail }]
+//     });
+
+//     res.status(200).json({ createdEvent });
+//   } catch (err) {
+//     next(err);
+//   }
+// };
 
 exports.createEvent = async (req, res, next) => {
+  console.log("result =", req.body);
   try {
+    const result = await cloudinary.upload(req.file?.path, null, "Event");
+
     const event = await Event.create({
       userId: req.user.id,
       title: req.body.title
@@ -13,7 +50,8 @@ exports.createEvent = async (req, res, next) => {
       date: req.body.date,
       time: req.body.time,
       latitude: req.body.latitude,
-      longitude: req.body.longitude
+      longitude: req.body.longitude,
+      image: result
     });
 
     await EventUser.create({
@@ -29,6 +67,10 @@ exports.createEvent = async (req, res, next) => {
     res.status(200).json({ createdEvent });
   } catch (err) {
     next(err);
+  } finally {
+    if (req.file) {
+      fs.unlinkSync(req.file.path);
+    }
   }
 };
 

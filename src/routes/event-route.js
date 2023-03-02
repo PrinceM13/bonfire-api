@@ -1,10 +1,11 @@
 const express = require("express");
 
 const eventController = require("../controllers/event-controller");
+const upload = require("../middlewares/upload");
 
 const router = express.Router();
 
-router.post("/", eventController.createEvent);
+router.post("/", upload.single("image"), eventController.createEvent);
 router.get("/", eventController.getAllEvents);
 // router.get("/?category=category")
 // router.get("/?date=date")
