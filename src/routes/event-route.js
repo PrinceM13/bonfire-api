@@ -10,8 +10,7 @@ router.get("/", eventController.getAllEvents);
 // router.get("/?category=category")
 // router.get("/?date=date")
 // router.get("/?location=location")
-// router.get("/:eventId", eventController.getEventsById);
-router.patch("/:eventId", eventController.updateEvents);
+router.patch("/:eventId", upload.single("image"), eventController.updateEvents);
 router.delete("/:eventId", eventController.deleteEvents);
 
 module.exports = router;

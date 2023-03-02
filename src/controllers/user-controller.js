@@ -24,25 +24,16 @@ exports.getMyProfile = async (req, res, next) => {
 
 exports.editMyProfile = async (req, res, next) => {
   try {
-    const { username, bio, education, company } = req.body;
-    const value = { username, bio, education, company };
+    let profileUrl;
+
+    if (req.file) {
+      profileUrl = await cloudinary.upload(req.file?.path, null, "User");
+    }
+
+    const { profileImage, username, bio, education, company } = req.body;
+    const value = { profileImage: profileUrl, username, bio, education, company };
 
     const updateUser = await User.update(value, { where: { id: req.user.id } });
-
-    res.status(200).json({ value });
-  } catch (err) {
-    next(err);
-  }
-};
-
-exports.editMyProfileImage = async (req, res, next) => {
-  try {
-    const profileUrl = await cloudinary.upload(req.file?.path, null, "User");
-
-    const { profileImage } = req.body;
-    const value = { profileImage: profileUrl };
-
-    const updateUserImage = await User.update(value, { where: { id: req.user.id } });
 
     res.status(200).json({ value });
   } catch (err) {
