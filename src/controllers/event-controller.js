@@ -63,12 +63,6 @@ exports.createEvent = async (req, res, next) => {
       paticipant: req.body.paticipant
     });
 
-    await Rule.create({
-      EventDetailId: eventDetail.id,
-      age: req.body.age,
-      paticipant: req.body.paticipant
-    });
-
     await EventUser.create({
       userId: req.user.id,
       eventId: event.id,
