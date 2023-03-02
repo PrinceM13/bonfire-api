@@ -8,6 +8,8 @@ exports.TYPE_TRAVEL = "TRAVEL";
 exports.STATUS_UPCOMING = "UPCOMING";
 exports.STATUS_ONGOING = "ONGOING";
 exports.STATUS_PAST = "PAST";
+exports.STATUS_INTERESTED = "INTERESTED";
+exports.STATUS_JOINED = "JOINED";
 
 exports.TYPE_FACEBOOK = "FACEBOOK";
 exports.TYPE_IG = "IG";

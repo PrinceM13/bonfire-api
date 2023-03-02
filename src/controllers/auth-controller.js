@@ -7,7 +7,7 @@ const {
   validateLoginWithGoogle
 } = require("../validators/auth-validator");
 
-const { User } = require("../models");
+const { User, EventUser } = require("../models");
 const createError = require("../utils/create-error");
 
 exports.register = async (req, res, next) => {
@@ -72,6 +72,12 @@ exports.login = async (req, res, next) => {
       }
     }
 
+    // findall
+    // const eventUsers = UserEvent.findall where ---> userId = user.id ---> [{userId, eventId},{}]
+    const eventUsers = await EventUser.findAll({
+      where: { userId: req.user.id }
+    });
+
     // generate token if both email and password are valid
     const accessToken = jwt.sign(
       {
@@ -85,7 +91,8 @@ exports.login = async (req, res, next) => {
         username: user.username,
         education: user.education,
         company: user.company,
-        googleId: user.googleId
+        googleId: user.googleId,
+        EventUsers: eventUsers
       },
       process.env.JWT_SECRET_KEY,
       { expiresIn: process.env.JWT_EXPIRES_IN }
