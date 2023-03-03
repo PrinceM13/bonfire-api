@@ -25,6 +25,7 @@ const chalk = require("chalk");
 const authRoute = require("./routes/auth-route");
 const userRoute = require("./routes/user-route");
 const eventRoute = require("./routes/event-route");
+const tagRoute = require("./routes/tag-route");
 
 // require - middleware
 const notFoundMiddleWare = require("./middlewares/not-found");
@@ -41,6 +42,7 @@ app.use(express.json()); // to get BODY data
 app.use("/auth", authRoute);
 app.use("/user", authenticate, userRoute);
 app.use("/events", authenticate, eventRoute);
+app.use("/tag", authenticate, tagRoute);
 
 io.on("connection", (socket) => {
   console.log("a user connected");
