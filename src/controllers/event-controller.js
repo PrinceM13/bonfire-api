@@ -78,9 +78,27 @@ exports.createEvent = async (req, res, next) => {
 exports.getAllEvents = async (req, res, next) => {
   try {
     const events = await Event.findAll({
-      include: {
-        model: EventDetail
-      }
+      attributes: { exclude: ["createdAt", "updatedAt"] },
+      include: [
+        { model: User, attributes: ["username"] }, // host
+        {
+          model: EventUser,
+          attributes: { exclude: ["createdAt", "updatedAt"] },
+          include: { model: User, attributes: ["username"] } // paticipant
+        },
+        {
+          model: EventDetail,
+          attributes: { exclude: ["createdAt", "updatedAt"] },
+          include: [
+            { model: Rule, attributes: { exclude: ["createdAt", "updatedAt"] } },
+            {
+              model: EventTag,
+              attributes: { exclude: ["createdAt", "updatedAt"] },
+              include: { model: Tag, attributes: { exclude: ["createdAt", "updatedAt"] } }
+            }
+          ]
+        }
+      ]
     });
     res.status(200).json({ events });
   } catch (err) {
