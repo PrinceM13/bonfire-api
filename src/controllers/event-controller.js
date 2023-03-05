@@ -1,6 +1,6 @@
+const { Event, EventDetail, User, EventUser, Rule, Tag, EventTag } = require("../models");
 const fs = require("fs");
 
-const { Event, EventDetail, User, EventUser, Rule, Tag, EventTag } = require("../models");
 const createError = require("../utils/create-error");
 const cloudinary = require("../utils/cloudinary");
 
@@ -41,18 +41,26 @@ exports.createEvent = async (req, res, next) => {
       status: req.body.status
     });
 
-    const tags = req.body.titleTag || [];
+    const tags = req.body.tags || [];
 
     for (let i = 0; i < tags.length; i++) {
       const tag = tags[i];
-      const createdTag = await Tag.create({
-        titleTag: tag
-      });
 
-      await EventTag.create({
-        EventDetailId: eventDetail.id,
-        tagId: createdTag.id
-      });
+      // check if tag is already exist or not
+      let tagId;
+      const checkTag = await Tag.findOne({ where: { titleTag: tag } });
+      if (!checkTag) {
+        const createdTag = await Tag.create({ titleTag: tag });
+        tagId = createdTag.id;
+      } else {
+        tagId = checkTag.id;
+        const [totalUpdate] = await Tag.update(
+          { count: checkTag.count + 1 },
+          { where: { id: tagId } }
+        );
+      }
+
+      await EventTag.create({ EventDetailId: eventDetail.id, tagId });
     }
 
     const createdEvent = await Event.findOne({
@@ -165,13 +173,15 @@ exports.deleteEvents = async (req, res, next) => {
       createError("invalid event", 400);
     }
 
-    const eventDetailDelete = await EventDetail.findOne({
-      where: { eventId: +req.params.eventId }
-    });
-
     const eventUserDelete = await EventUser.findOne({
       where: { eventId: +req.params.eventId }
     });
+
+    const eventDetailDelete = await EventDetail.findOne({
+      where: { eventId: +req.params.eventId }
+    });
+    await Rule.destroy({ where: { EventDetailId: eventDetailDelete.id } });
+    await EventTag.destroy({ where: { EventDetailId: eventDetailDelete.id } });
 
     await eventDetailDelete.destroy();
     await eventUserDelete.destroy();
