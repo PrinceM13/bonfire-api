@@ -9,6 +9,11 @@ module.exports = (sequelize, DataTypes) => {
       titleTag: {
         type: DataTypes.STRING,
         allowNull: true
+      },
+      count: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 1
       }
     },
     { underscored: true }
