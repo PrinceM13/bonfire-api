@@ -7,6 +7,7 @@ const router = express.Router();
 
 router.post("/", upload.single("image"), eventController.createEvent);
 router.get("/", eventController.getAllEvents);
+router.get("/:eventId", eventController.getEventsById);
 // router.get("/?category=category")
 // router.get("/?date=date")
 // router.get("/?location=location")
