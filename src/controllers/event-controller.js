@@ -114,24 +114,37 @@ exports.getAllEvents = async (req, res, next) => {
   }
 };
 
-// exports.getEventsById = async (req, res, next) => {
-//   try {
-//     const event = await Event.findOne({
-//       where: { id: req.params.eventId },
-//       include: [
-//         {
-//           model: EventDetail
-//         },
-//         {
-//           model: User
-//         }
-//       ]
-//     });
-//     res.status(200).json({ event });
-//   } catch (err) {
-//     next(err);
-//   }
-// };
+exports.getEventsById = async (req, res, next) => {
+  try {
+    const event = await Event.findOne({
+      where: { id: +req.params.eventId },
+      attributes: { exclude: ["createdAt", "updatedAt"] },
+      include: [
+        { model: User, attributes: ["username"] }, // host
+        {
+          model: EventUser,
+          attributes: { exclude: ["createdAt", "updatedAt"] },
+          include: { model: User, attributes: ["username"] } // paticipant
+        },
+        {
+          model: EventDetail,
+          attributes: { exclude: ["createdAt", "updatedAt"] },
+          include: [
+            { model: Rule, attributes: { exclude: ["createdAt", "updatedAt"] } },
+            {
+              model: EventTag,
+              attributes: { exclude: ["createdAt", "updatedAt"] },
+              include: { model: Tag, attributes: { exclude: ["createdAt", "updatedAt"] } }
+            }
+          ]
+        }
+      ]
+    });
+    res.status(200).json({ event });
+  } catch (err) {
+    next(err);
+  }
+};
 
 exports.updateEvents = async (req, res, next) => {
   try {
