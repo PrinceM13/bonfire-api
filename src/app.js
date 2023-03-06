@@ -16,6 +16,8 @@ const app = express();
 const server = http.createServer(app);
 const io = socketio(server, { cors: corsOptions });
 
+const socketIo = require("./socket-io/socket-io");
+
 const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
@@ -44,57 +46,8 @@ app.use("/user", authenticate, userRoute);
 app.use("/events", authenticate, eventRoute);
 app.use("/tag", authenticate, tagRoute);
 
-io.on("connection", (socket) => {
-  console.log("a user connected");
-  console.log(socket.id);
-
-  // client subscribe to specific room
-  socket.on("joinRoom", (room) => {
-    socket.join(room);
-    socket.to(room).emit("message", {
-      user: "connect",
-      content: `<--- user: ${String(socket.id).slice(1, 5)} is connected`
-    });
-  });
-
-  // // broadcast to all clients (except incoming client) -------------------------------
-  // socket.broadcast.emit("message", {
-  //   user: "connect",
-  //   content: `<--- user: ${String(socket.id).slice(1, 5)} is connected`
-  // });
-
-  // // send incoming message to all clients
-  // socket.on("message", (data) => {
-  //   console.log(`Received message: ${data}`);
-  //   io.emit("message", { user: socket.id, content: data });
-  // });
-  // ------------------------------------------------------------------------------------
-
-  // send incoming message to all clients in specific room
-  socket.on("message", (data) => {
-    console.log(`Received message: ${data}`);
-    io.to(data.eventId).emit("message", data);
-  });
-
-  // client leave from specific room
-  socket.on("leaveRoom", (room) => {
-    socket.to(room).emit("message", {
-      user: "disconnect",
-      content: `user: ${String(socket.id).slice(1, 5)} is disconnected --->`
-    });
-    socket.leave(room);
-  });
-
-  // broadcast to all clients (except incoming client) ----------------------------------
-  socket.on("disconnect", () => {
-    console.log("a user disconnected");
-    // socket.broadcast.emit("message", {
-    //   user: "disconnect",
-    //   content: `user: ${String(socket.id).slice(1, 5)} is disconnected --->`
-    // });
-  });
-  // ------------------------------------------------------------------------------------
-});
+// socket-io
+socketIo(io);
 
 // middleware error
 app.use(notFoundMiddleWare);

@@ -3,6 +3,7 @@ const fs = require("fs");
 
 const createError = require("../utils/create-error");
 const cloudinary = require("../utils/cloudinary");
+const { STATUS_INTERESTED } = require("../config/constants");
 
 exports.createEvent = async (req, res, next) => {
   try {
@@ -203,5 +204,20 @@ exports.deleteEvents = async (req, res, next) => {
     res.status(204).json();
   } catch (err) {
     next(err);
+  }
+};
+
+// event-users ---------------------------------------------------------------
+exports.createEventUser = async (req, res, next) => {
+  try {
+    const eventUser = await EventUser.create({
+      userId: req.user.id,
+      eventId: req.body.eventId,
+      status: STATUS_INTERESTED
+    });
+
+    res.status(200).json({ eventUser });
+  } catch (err) {
+    createError("invalid input", 400);
   }
 };

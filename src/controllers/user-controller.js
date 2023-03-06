@@ -87,3 +87,21 @@ exports.getMyEvent = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.getMyEventUsers = async (req, res, next) => {
+  try {
+    // get all events that auth user joined
+    const eventUsers = await EventUser.findAll({
+      where: { userId: req.user.id },
+      include: {
+        model: Event,
+        attributes: { exclude: ["createdAt", "updatedAt"] },
+        include: { model: EventDetail, attributes: { exclude: ["createdAt", "updatedAt"] } }
+      },
+      attributes: { exclude: ["createdAt", "updatedAt"] }
+    });
+    res.status(200).json({ eventUsers });
+  } catch (err) {
+    next(err);
+  }
+};

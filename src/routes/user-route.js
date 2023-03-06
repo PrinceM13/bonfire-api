@@ -9,5 +9,6 @@ router.get("/profile", userController.getMyProfile);
 router.patch("/profile", upload.single("profileImage"), userController.editMyProfile);
 router.patch("/link", userController.editMyLink);
 router.get("/events", userController.getMyEvent);
+router.get("/event-users", userController.getMyEventUsers);
 
 module.exports = router;
