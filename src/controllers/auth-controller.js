@@ -74,11 +74,18 @@ exports.login = async (req, res, next) => {
 
     // get all events that auth user joined
     const eventUsers = await EventUser.findAll({
-      where: { userId: user.id }
+      where: { userId: user.id },
+      include: {
+        model: Event,
+        attributes: { exclude: ["createdAt", "updatedAt"] },
+        include: { model: EventDetail, attributes: { exclude: ["createdAt", "updatedAt"] } }
+      },
+      attributes: { exclude: ["createdAt", "updatedAt"] }
     });
     const events = await Event.findAll({
       where: { userId: user.id },
-      include: { model: EventDetail }
+      include: { model: EventDetail, attributes: { exclude: ["createdAt", "updatedAt"] } },
+      attributes: { exclude: ["createdAt", "updatedAt"] }
     });
 
     // generate token if both email and password are valid
