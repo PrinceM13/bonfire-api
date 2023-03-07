@@ -22,6 +22,28 @@ exports.getMyProfile = async (req, res, next) => {
   }
 };
 
+exports.getProfileById = async (req, res, next) => {
+  try {
+    const profile = await User.findOne({
+      where: { id: +req.params.userId },
+      attributes: { exclude: ["password", "createdAt", "updatedAt"] },
+      include: [
+        { model: EventUser, attributes: { exclude: ["createdAt", "updatedAt"] } },
+        { model: SocialLink, attributes: { exclude: ["createdAt", "updatedAt"] } },
+        {
+          model: Event,
+          attributes: { exclude: ["createdAt", "updatedAt"] },
+          include: { model: EventDetail, attributes: { exclude: ["createdAt", "updatedAt"] } }
+        },
+        { model: UserCategory, attributes: { exclude: ["createdAt", "updatedAt"] } }
+      ]
+    });
+    res.status(200).json({ profile });
+  } catch (err) {
+    next(err);
+  }
+};
+
 exports.editMyProfile = async (req, res, next) => {
   console.log("I TOOONNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNNN", req.body);
   try {
