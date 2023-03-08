@@ -14,3 +14,7 @@ exports.STATUS_JOINED = "JOINED";
 exports.TYPE_FACEBOOK = "FACEBOOK";
 exports.TYPE_IG = "IG";
 exports.TYPE_LINE = "LINE";
+
+// notification
+exports.TYPE_MESSAGE = "TYPE_MESSAGE";
+exports.TYPE_JOIN_ROOM = "TYPE_JOIN_ROOM";
