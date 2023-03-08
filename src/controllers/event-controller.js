@@ -42,7 +42,7 @@ exports.createEvent = async (req, res, next) => {
       status: req.body.status
     });
 
-    const tags = req.body.tags || [];
+    const tags = req.body.tags.split("#") || [];
 
     for (let i = 0; i < tags.length; i++) {
       const tag = tags[i];
