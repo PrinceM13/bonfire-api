@@ -92,7 +92,7 @@ exports.getAllEvents = async (req, res, next) => {
         {
           model: EventUser,
           attributes: { exclude: ["createdAt", "updatedAt"] },
-          include: { model: User, attributes: ["username"] } // paticipant
+          include: { model: User, attributes: ["username", "profileImage"] } // paticipant
         },
         {
           model: EventDetail,
