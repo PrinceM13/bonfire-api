@@ -88,11 +88,11 @@ exports.getAllEvents = async (req, res, next) => {
   try {
     const events = await Event.findAll({
       include: [
-        { model: User, attributes: ["username"] }, // host
+        { model: User, attributes: ["username", "profileImage"] }, // host
         {
           model: EventUser,
           attributes: { exclude: ["createdAt", "updatedAt"] },
-          include: { model: User, attributes: ["username", "profileImage"] } // paticipant
+          include: { model: User, attributes: ["username"] } // paticipant
         },
         {
           model: EventDetail,
