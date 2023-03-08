@@ -87,7 +87,6 @@ exports.createEvent = async (req, res, next) => {
 exports.getAllEvents = async (req, res, next) => {
   try {
     const events = await Event.findAll({
-      attributes: { exclude: ["createdAt", "updatedAt"] },
       include: [
         { model: User, attributes: ["username"] }, // host
         {
