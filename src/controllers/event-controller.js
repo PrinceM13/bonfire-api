@@ -42,7 +42,7 @@ exports.createEvent = async (req, res, next) => {
       status: req.body.status
     });
 
-    const tags = req.body.tags || [];
+    const tags = req.body.tags.split("#") || [];
 
     for (let i = 0; i < tags.length; i++) {
       const tag = tags[i];
@@ -87,9 +87,8 @@ exports.createEvent = async (req, res, next) => {
 exports.getAllEvents = async (req, res, next) => {
   try {
     const events = await Event.findAll({
-      attributes: { exclude: ["createdAt", "updatedAt"] },
       include: [
-        { model: User, attributes: ["username"] }, // host
+        { model: User, attributes: ["username", "profileImage"] }, // host
         {
           model: EventUser,
           attributes: { exclude: ["createdAt", "updatedAt"] },
