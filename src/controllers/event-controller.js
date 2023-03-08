@@ -106,7 +106,8 @@ exports.getAllEvents = async (req, res, next) => {
             }
           ]
         }
-      ]
+      ],
+      order: [["updatedAt", "DESC"]]
     });
     res.status(200).json({ events });
   } catch (err) {
