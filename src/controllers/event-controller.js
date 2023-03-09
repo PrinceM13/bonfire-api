@@ -3,7 +3,7 @@ const fs = require("fs");
 
 const createError = require("../utils/create-error");
 const cloudinary = require("../utils/cloudinary");
-const { STATUS_INTERESTED } = require("../config/constants");
+const { STATUS_INTERESTED, STATUS_JOINED } = require("../config/constants");
 
 exports.createEvent = async (req, res, next) => {
   try {
@@ -39,7 +39,7 @@ exports.createEvent = async (req, res, next) => {
     await EventUser.create({
       userId: req.user.id,
       eventId: event.id,
-      status: req.body.status
+      status: STATUS_JOINED
     });
 
     const tags = req.body.tags.split("#") || [];
@@ -92,7 +92,7 @@ exports.getAllEvents = async (req, res, next) => {
         {
           model: EventUser,
           attributes: { exclude: ["createdAt", "updatedAt"] },
-          include: { model: User, attributes: ["username"] } // paticipant
+          include: { model: User, attributes: ["username", "profileImage"] } // paticipant
         },
         {
           model: EventDetail,
@@ -125,7 +125,7 @@ exports.getEventsById = async (req, res, next) => {
         {
           model: EventUser,
           attributes: { exclude: ["createdAt", "updatedAt"] },
-          include: { model: User, attributes: ["username"] } // paticipant
+          include: { model: User, attributes: ["username", "profileImage"] } // paticipant
         },
         {
           model: EventDetail,
