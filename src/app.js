@@ -1,5 +1,5 @@
 // const { sequelize } = require("./models");
-// sequelize.sync({ alter: true });
+// sequelize.sync({ force: true });
 
 require("dotenv").config();
 // setting cors for socket.io
@@ -28,6 +28,7 @@ const authRoute = require("./routes/auth-route");
 const userRoute = require("./routes/user-route");
 const eventRoute = require("./routes/event-route");
 const tagRoute = require("./routes/tag-route");
+const chatRoute = require("./routes/chat-route");
 
 // require - middleware
 const notFoundMiddleWare = require("./middlewares/not-found");
@@ -45,6 +46,7 @@ app.use("/auth", authRoute);
 app.use("/user", authenticate, userRoute);
 app.use("/events", authenticate, eventRoute);
 app.use("/tag", authenticate, tagRoute);
+app.use("/chats", authenticate, chatRoute);
 
 // socket-io
 socketIo(io);

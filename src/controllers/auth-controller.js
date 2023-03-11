@@ -29,7 +29,7 @@ exports.register = async (req, res, next) => {
     data.password = await bcrypt.hash(data.password, 12);
 
     // create user in User table
-    await User.create(data);
+    await User.create({ ...data, username: req.body.firstName });
 
     // response with success message
     res.status(201).json({ message: "account was successfully created" });
