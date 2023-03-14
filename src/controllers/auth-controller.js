@@ -95,6 +95,7 @@ exports.login = async (req, res, next) => {
         phone: user.phone,
         firstName: user.firstName,
         lastName: user.lastName,
+        profileImage: user.profileImage,
         email: user.email,
         birthDate: user.birthDate,
         bio: user.bio,
