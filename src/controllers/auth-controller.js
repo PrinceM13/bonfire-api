@@ -101,9 +101,7 @@ exports.login = async (req, res, next) => {
         username: user.username,
         education: user.education,
         company: user.company,
-        googleId: user.googleId,
-        EventUsers: eventUsers,
-        Events: events
+        googleId: user.googleId
       },
       process.env.JWT_SECRET_KEY,
       { expiresIn: process.env.JWT_EXPIRES_IN }
